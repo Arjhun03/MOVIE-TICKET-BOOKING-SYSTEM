@@ -2,12 +2,12 @@ namespace MovieTicketBooking.Models;
 
 public class Theatre
 {
-    // Primary Key
     public int TheatreId { get; set; }
 
-    // Theatre Name
     public string Name { get; set; } = string.Empty;
 
-    // Theatre Location
     public string Location { get; set; } = string.Empty;
+
+    // One Theatre can have multiple Screens
+    public ICollection<Screen> Screens { get; set; } = new List<Screen>();
 }

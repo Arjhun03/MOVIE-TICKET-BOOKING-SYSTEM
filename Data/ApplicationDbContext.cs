@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using MovieTicketBooking.Models;
 
@@ -14,6 +15,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Theatre> Theatres { get; set; }
 
     public DbSet<Movie> Movies { get; set; }
+
+    public DbSet<Screen> Screens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -69,6 +72,30 @@ public class ApplicationDbContext : DbContext
             entity.Property(m => m.Genre)
                 .HasMaxLength(50)
                 .IsRequired();
+        });
+
+        // Screen Configuration
+        modelBuilder.Entity<Screen>(entity =>
+        {
+            entity.ToTable("Screens");
+
+            entity.HasKey(s => s.ScreenId);
+
+            entity.Property(s => s.ScreenId)
+                .ValueGeneratedOnAdd();
+
+            entity.Property(s => s.ScreenName)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            entity.HasOne(s => s.Theatre)
+                .WithMany(t => t.Screens)
+                .HasForeignKey(s => s.TheatreId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Screen name must be unique within a theatre
+            entity.HasIndex(s => new { s.TheatreId, s.ScreenName })
+                .IsUnique();
         });
     }
 }
