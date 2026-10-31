@@ -1,16 +1,34 @@
+using Microsoft.EntityFrameworkCore;
+using MovieTicketBooking.Data;
+using MovieTicketBooking.Repositories;
+using MovieTicketBooking.Repositories.Interfaces;
+using MovieTicketBooking.Services;
+using MovieTicketBooking.Services.Interfaces;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Register Controllers
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+// Database Connection
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
+
+// Register Repository
+builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
+
+// Register Service
+builder.Services.AddScoped<ITheatreService, TheatreService>();
+
+// Register OpenAPI
 builder.Services.AddOpenApi();
-builder.Configuration.GetConnectionString("DefaultConnection");
 
 var app = builder.Build();
-// Configure the HTTP request pipeline.
+
+// Configure Scalar
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
