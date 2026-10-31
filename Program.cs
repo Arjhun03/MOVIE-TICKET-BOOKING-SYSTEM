@@ -17,11 +17,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
-// Register Repository
+// Theatre Repository and Service
 builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
-
-// Register Service
 builder.Services.AddScoped<ITheatreService, TheatreService>();
+
+// Movie Repository and Service
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IMovieService, MovieService>();
 
 // Register OpenAPI
 builder.Services.AddOpenApi();
