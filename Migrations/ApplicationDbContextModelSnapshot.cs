@@ -31,15 +31,17 @@ namespace MOVIE_TICKET_BOOKING_SYSTEM.Migrations
 
                     b.Property<string>("Location")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("TheatreId");
 
-                    b.ToTable("Theatres");
+                    b.ToTable("Theatres", (string)null);
                 });
 #pragma warning restore 612, 618
         }
