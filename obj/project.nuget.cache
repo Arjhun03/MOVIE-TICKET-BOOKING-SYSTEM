@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "eMali1FwpL8=",
+  "dgSpecHash": "+zunxNtKd+w=",
   "success": true,
   "projectFilePath": "/Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM.csproj",
   "expectedPackageFiles": [
@@ -41,6 +41,7 @@
     "/Users/arjhun_03/.nuget/packages/microsoft.visualstudio.solutionpersistence/1.0.52/microsoft.visualstudio.solutionpersistence.1.0.52.nupkg.sha512",
     "/Users/arjhun_03/.nuget/packages/mono.texttemplating/3.0.0/mono.texttemplating.3.0.0.nupkg.sha512",
     "/Users/arjhun_03/.nuget/packages/newtonsoft.json/13.0.4/newtonsoft.json.13.0.4.nupkg.sha512",
+    "/Users/arjhun_03/.nuget/packages/scalar.aspnetcore/2.18.7/scalar.aspnetcore.2.18.7.nupkg.sha512",
     "/Users/arjhun_03/.nuget/packages/system.clientmodel/1.8.0/system.clientmodel.1.8.0.nupkg.sha512",
     "/Users/arjhun_03/.nuget/packages/system.codedom/6.0.0/system.codedom.6.0.0.nupkg.sha512",
     "/Users/arjhun_03/.nuget/packages/system.composition/9.0.0/system.composition.9.0.0.nupkg.sha512",

@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("35965d0e-0fda-4e53-b264-16f3b60afd88")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("MOVIE_TICKET_BOOKING_SYSTEM")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1996d4eae2c86c87b0e523e6ae57d2f2d5b1c36f")]
 [assembly: System.Reflection.AssemblyProductAttribute("MOVIE_TICKET_BOOKING_SYSTEM")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MOVIE_TICKET_BOOKING_SYSTEM")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
