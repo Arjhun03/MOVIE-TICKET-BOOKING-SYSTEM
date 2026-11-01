@@ -20,7 +20,6 @@ public class ShowRepository : IShowRepository
         return await _context.Shows
             .Include(s => s.Movie)
             .Include(s => s.Screen)
-            .OrderBy(s => s.StartTime)
             .ToListAsync();
     }
 
@@ -38,7 +37,6 @@ public class ShowRepository : IShowRepository
             .Include(s => s.Movie)
             .Include(s => s.Screen)
             .Where(s => s.MovieId == movieId)
-            .OrderBy(s => s.StartTime)
             .ToListAsync();
     }
 
@@ -48,17 +46,38 @@ public class ShowRepository : IShowRepository
             .Include(s => s.Movie)
             .Include(s => s.Screen)
             .Where(s => s.ScreenId == screenId)
-            .OrderBy(s => s.StartTime)
             .ToListAsync();
     }
 
     public async Task<Show> CreateAsync(Show show)
     {
+        await using var transaction =
+            await _context.Database.BeginTransactionAsync();
+
         _context.Shows.Add(show);
 
         await _context.SaveChangesAsync();
 
-        return await GetByIdAsync(show.ShowId) ?? show;
+        // Get all physical seats belonging to this screen.
+        var seats = await _context.Seats
+            .Where(s => s.ScreenId == show.ScreenId)
+            .ToListAsync();
+
+        // Generate ShowSeat records automatically.
+        var showSeats = seats.Select(seat => new ShowSeat
+        {
+            ShowId = show.ShowId,
+            SeatId = seat.SeatId,
+            Status = "Available"
+        }).ToList();
+
+        _context.ShowSeats.AddRange(showSeats);
+
+        await _context.SaveChangesAsync();
+
+        await transaction.CommitAsync();
+
+        return show;
     }
 
     public async Task<bool> UpdateAsync(Show show)

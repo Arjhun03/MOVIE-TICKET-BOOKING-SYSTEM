@@ -21,6 +21,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Seat> Seats { get; set; }
 
     public DbSet<Show> Shows { get; set; }
+    
+    public DbSet<ShowSeat> ShowSeats { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -175,6 +177,40 @@ public class ApplicationDbContext : DbContext
                 .WithMany(s => s.Shows)
                 .HasForeignKey(s => s.ScreenId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+        
+        // ShowSeat Configuration
+        modelBuilder.Entity<ShowSeat>(entity =>
+        {
+            entity.ToTable("ShowSeats", table =>
+            {
+                table.HasCheckConstraint(
+                    "CK_ShowSeats_Status",
+                    "[Status] IN ('Available', 'Booked')");
+            });
+
+            entity.HasKey(ss => ss.ShowSeatId);
+
+            entity.Property(ss => ss.ShowSeatId)
+                .ValueGeneratedOnAdd();
+
+            entity.Property(ss => ss.Status)
+                .IsRequired()
+                .HasMaxLength(20)
+                .HasDefaultValue("Available");
+
+            entity.HasOne(ss => ss.Show)
+                .WithMany(s => s.ShowSeats)
+                .HasForeignKey(ss => ss.ShowId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(ss => ss.Seat)
+                .WithMany(s => s.ShowSeats)
+                .HasForeignKey(ss => ss.SeatId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(ss => new { ss.ShowId, ss.SeatId })
+                .IsUnique();
         });
     }
 }

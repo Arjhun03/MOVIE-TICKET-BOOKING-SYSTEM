@@ -14,4 +14,6 @@ public class Seat
 
     // Navigation property
     public Screen Screen { get; set; } = null!;
+    
+    public ICollection<ShowSeat> ShowSeats { get; set; } = new List<ShowSeat>();
 }
