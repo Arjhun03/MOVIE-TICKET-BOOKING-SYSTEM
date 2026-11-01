@@ -15,4 +15,7 @@ public class Movie
     public string Language { get; set; } = string.Empty;
 
     public string Genre { get; set; } = string.Empty;
+
+    // One Movie can have multiple Shows
+    public ICollection<Show> Shows { get; set; } = new List<Show>();
 }

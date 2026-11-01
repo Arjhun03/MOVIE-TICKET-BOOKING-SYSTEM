@@ -1,10 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using MovieTicketBooking.Data;
-using MovieTicketBooking.Repositories;
-using MovieTicketBooking.Repositories.Interfaces;
-using MovieTicketBooking.Services;
-using MovieTicketBooking.Services.Interfaces;
 using Scalar.AspNetCore;
+using MovieTicketBooking.Data;
 using MovieTicketBooking.Repositories;
 using MovieTicketBooking.Repositories.Interfaces;
 using MovieTicketBooking.Services;
@@ -18,27 +14,34 @@ builder.Services.AddControllers();
 // Database Connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Theatre
+// Register Theatre Repository and Service
 builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
 builder.Services.AddScoped<ITheatreService, TheatreService>();
 
-// Movie
+// Register Movie Repository and Service
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 
-// Screen
+// Register Screen Repository and Service
 builder.Services.AddScoped<IScreenRepository, ScreenRepository>();
 builder.Services.AddScoped<IScreenService, ScreenService>();
+
+// Register Seat Repository and Service
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+builder.Services.AddScoped<ISeatService, SeatService>();
+
+// Register Show Repository and Service
+builder.Services.AddScoped<IShowRepository, ShowRepository>();
+builder.Services.AddScoped<IShowService, ShowService>();
 
 // OpenAPI
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Scalar
+// Configure HTTP Request Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

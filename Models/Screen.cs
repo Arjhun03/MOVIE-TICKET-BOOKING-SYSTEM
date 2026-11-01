@@ -12,4 +12,7 @@ public class Screen
 
     // One Screen can have multiple Seats
     public ICollection<Seat> Seats { get; set; } = new List<Seat>();
+
+    // One Screen can host multiple Shows
+    public ICollection<Show> Shows { get; set; } = new List<Show>();
 }
