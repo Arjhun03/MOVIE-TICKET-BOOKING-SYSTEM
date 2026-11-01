@@ -39,6 +39,9 @@ builder.Services.AddScoped<IShowService, ShowService>();
 builder.Services.AddScoped<IShowSeatRepository, ShowSeatRepository>();
 builder.Services.AddScoped<IShowSeatService, ShowSeatService>();
 
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+
 // OpenAPI
 builder.Services.AddOpenApi();
 
