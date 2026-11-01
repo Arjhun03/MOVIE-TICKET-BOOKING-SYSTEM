@@ -18,6 +18,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Screen> Screens { get; set; }
 
+    public DbSet<Seat> Seats { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -93,9 +95,44 @@ public class ApplicationDbContext : DbContext
                 .HasForeignKey(s => s.TheatreId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Screen name must be unique within a theatre
             entity.HasIndex(s => new { s.TheatreId, s.ScreenName })
                 .IsUnique();
+
+            // One Screen can have multiple Seats
+            entity.HasMany(s => s.Seats)
+                .WithOne(seat => seat.Screen)
+                .HasForeignKey(seat => seat.ScreenId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // Seat Configuration
+        modelBuilder.Entity<Seat>(entity =>
+        {
+            entity.ToTable("Seats");
+
+            entity.HasKey(s => s.SeatId);
+
+            entity.Property(s => s.SeatId)
+                .ValueGeneratedOnAdd();
+
+            entity.Property(s => s.RowName)
+                .HasMaxLength(5)
+                .IsRequired();
+
+            entity.Property(s => s.SeatNumber)
+                .IsRequired();
+
+            entity.Property(s => s.SeatType)
+                .HasMaxLength(30)
+                .IsRequired();
+
+            // Prevent duplicate seat positions within a screen
+            entity.HasIndex(s => new
+            {
+                s.ScreenId,
+                s.RowName,
+                s.SeatNumber
+            }).IsUnique();
         });
     }
 }

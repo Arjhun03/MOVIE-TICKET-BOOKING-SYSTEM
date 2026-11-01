@@ -9,4 +9,7 @@ public class Screen
     public string ScreenName { get; set; } = string.Empty;
 
     public Theatre Theatre { get; set; } = null!;
+
+    // One Screen can have multiple Seats
+    public ICollection<Seat> Seats { get; set; } = new List<Seat>();
 }
