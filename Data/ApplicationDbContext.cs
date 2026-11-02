@@ -297,7 +297,6 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Users");
 
             entity.HasKey(u => u.UserId);
-
             entity.Property(u => u.UserId)
                 .ValueGeneratedOnAdd();
 

@@ -323,6 +323,10 @@ namespace MOVIE_TICKET_BOOKING_SYSTEM.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserId");
 
                     b.HasIndex("Email")

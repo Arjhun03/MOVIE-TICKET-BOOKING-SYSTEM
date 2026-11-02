@@ -52,14 +52,15 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 
 // Register Authentication Services
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
+// Register Database Seeder
+builder.Services.AddScoped<DbSeeder>();
+
 // JWT Authentication Configuration
 var jwtSettings = builder.Configuration.GetSection("Jwt");
-
 var jwtKey = jwtSettings["Key"]
     ?? throw new InvalidOperationException("JWT Key is missing.");
 
@@ -73,14 +74,10 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
-
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtKey)
-            ),
-
+                Encoding.UTF8.GetBytes(jwtKey)),
             ClockSkew = TimeSpan.Zero
         };
     });
@@ -89,6 +86,17 @@ builder.Services
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+// Seed Admin and Manager accounts in Development
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+
+    var seeder = scope.ServiceProvider
+        .GetRequiredService<DbSeeder>();
+
+    await seeder.SeedAsync();
+}
 
 // Configure HTTP Request Pipeline
 if (app.Environment.IsDevelopment())
@@ -99,10 +107,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Authenticate JWT tokens
 app.UseAuthentication();
-
-// Check authorization permissions
 app.UseAuthorization();
 
 app.MapControllers();

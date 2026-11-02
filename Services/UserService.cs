@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Identity;
 using MovieTicketBooking.DTOs.Auth;
 using MovieTicketBooking.Models;
@@ -30,13 +31,13 @@ public class UserService(
         var user = new User
         {
             FullName = dto.FullName.Trim(),
-            Email = email
+            Email = email,
+            Role = "Customer"
         };
 
         user.PasswordHash = passwordHasher.HashPassword(
             user,
-            dto.Password
-        );
+            dto.Password);
 
         await userRepository.AddAsync(user);
         await userRepository.SaveChangesAsync();
@@ -66,8 +67,7 @@ public class UserService(
         var verificationResult = passwordHasher.VerifyHashedPassword(
             user,
             user.PasswordHash,
-            dto.Password
-        );
+            dto.Password);
 
         if (verificationResult == PasswordVerificationResult.Failed)
         {
