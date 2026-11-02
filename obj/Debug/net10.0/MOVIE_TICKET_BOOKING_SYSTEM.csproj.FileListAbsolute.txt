@@ -165,3 +165,5 @@
 /Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/obj/Debug/net10.0/MOVIE_TICKET_BOOKING_SYSTEM.pdb
 /Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/obj/Debug/net10.0/MOVIE_TICKET_BOOKING_SYSTEM.genruntimeconfig.cache
 /Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/obj/Debug/net10.0/ref/MOVIE_TICKET_BOOKING_SYSTEM.dll
+/Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/bin/Debug/net10.0/Microsoft.Bcl.Cryptography.dll

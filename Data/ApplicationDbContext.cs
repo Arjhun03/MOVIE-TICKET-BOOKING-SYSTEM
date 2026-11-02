@@ -20,6 +20,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<ShowSeat> ShowSeats { get; set; }
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<BookingSeat> BookingSeats { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -289,6 +290,35 @@ public class ApplicationDbContext : DbContext
 
             entity.HasIndex(bs => new { bs.BookingId, bs.SeatId })
                 .IsUnique();
+        });
+        
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.ToTable("Users");
+
+            entity.HasKey(u => u.UserId);
+
+            entity.Property(u => u.UserId)
+                .ValueGeneratedOnAdd();
+
+            entity.Property(u => u.FullName)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            entity.Property(u => u.Email)
+                .HasMaxLength(150)
+                .IsRequired();
+
+            entity.HasIndex(u => u.Email)
+                .IsUnique();
+
+            entity.Property(u => u.PasswordHash)
+                .HasMaxLength(500)
+                .IsRequired();
+
+            entity.Property(u => u.CreatedAt)
+                .HasColumnType("datetime2")
+                .IsRequired();
         });
     }
 }
