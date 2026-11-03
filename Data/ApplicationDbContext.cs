@@ -297,6 +297,7 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Users");
 
             entity.HasKey(u => u.UserId);
+
             entity.Property(u => u.UserId)
                 .ValueGeneratedOnAdd();
 
@@ -318,6 +319,13 @@ public class ApplicationDbContext : DbContext
             entity.Property(u => u.CreatedAt)
                 .HasColumnType("datetime2")
                 .IsRequired();
+
+            // User and Theatre relationship
+            entity.HasOne(u => u.Theatre)
+                .WithMany(t => t.Managers)
+                .HasForeignKey(u => u.TheatreId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

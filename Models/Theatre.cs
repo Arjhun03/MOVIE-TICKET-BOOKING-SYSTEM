@@ -10,4 +10,7 @@ public class Theatre
 
     // One Theatre can have multiple Screens
     public ICollection<Screen> Screens { get; set; } = new List<Screen>();
+
+    // One Theatre can have multiple Managers
+    public ICollection<User> Managers { get; set; } = new List<User>();
 }

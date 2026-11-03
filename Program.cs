@@ -96,8 +96,6 @@ if (app.Environment.IsDevelopment())
         .GetRequiredService<DbSeeder>();
 
     await seeder.SeedAsync();
-    await seeder.ResetAdminPasswordAsync();
-    Console.WriteLine("Admin password reset successfully.");
 }
 
 // Configure HTTP Request Pipeline

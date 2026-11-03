@@ -13,4 +13,9 @@ public class User
     public string Role { get; set; } = "Customer";
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    // Theatre assigned to this manager
+    public int? TheatreId { get; set; }
+
+    public Theatre? Theatre { get; set; }
 }

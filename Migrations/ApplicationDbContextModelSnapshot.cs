@@ -327,10 +327,15 @@ namespace MOVIE_TICKET_BOOKING_SYSTEM.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TheatreId")
+                        .HasColumnType("int");
+
                     b.HasKey("UserId");
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("TheatreId");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -425,6 +430,16 @@ namespace MOVIE_TICKET_BOOKING_SYSTEM.Migrations
                     b.Navigation("Show");
                 });
 
+            modelBuilder.Entity("MovieTicketBooking.Models.User", b =>
+                {
+                    b.HasOne("MovieTicketBooking.Models.Theatre", "Theatre")
+                        .WithMany("Managers")
+                        .HasForeignKey("TheatreId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Theatre");
+                });
+
             modelBuilder.Entity("MovieTicketBooking.Models.Booking", b =>
                 {
                     b.Navigation("BookingSeats");
@@ -458,6 +473,8 @@ namespace MOVIE_TICKET_BOOKING_SYSTEM.Migrations
 
             modelBuilder.Entity("MovieTicketBooking.Models.Theatre", b =>
                 {
+                    b.Navigation("Managers");
+
                     b.Navigation("Screens");
                 });
 #pragma warning restore 612, 618
