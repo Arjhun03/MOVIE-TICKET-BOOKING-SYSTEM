@@ -19,6 +19,7 @@ builder.Services.AddControllers();
 
 // Allow the local Angular development server. Production deployments should
 // set Cors:AllowedOrigins to the exact frontend origin(s).
+
 var corsOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
     .Get<string[]>() ?? ["http://localhost:4200"];

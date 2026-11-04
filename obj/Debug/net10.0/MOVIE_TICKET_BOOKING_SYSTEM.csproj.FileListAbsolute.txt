@@ -169,6 +169,7 @@
 /Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/bin/Debug/net10.0/Microsoft.Bcl.Cryptography.dll
 /Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/bin/Debug/net10.0/MOVIE_TICKET_BOOKING_SYSTEM.staticwebassets.runtime.json
 /Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/obj/Debug/net10.0/compressed/244yratpc9-{0}-vagikyz9qx-vagikyz9qx.gz
-/Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/obj/Debug/net10.0/compressed/dv5geo5wjw-{0}-yyzf2czh0t-yyzf2czh0t.gz
 /Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/obj/Debug/net10.0/compressed/plndeh7ub6-{0}-kugtl3xh8u-kugtl3xh8u.gz
 /Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/obj/Debug/net10.0/compressed/nux87f3vdf-{0}-97x0gu1py1-97x0gu1py1.gz
+/Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/obj/Debug/net10.0/compressed/dv5geo5wjw-{0}-m8ocph774r-m8ocph774r.gz
+/Users/arjhun_03/RiderProjects/MOVIE_TICKET_BOOKING_SYSTEM/MOVIE_TICKET_BOOKING_SYSTEM/obj/Debug/net10.0/compressed/ylszb0nfts-{0}-mbkw1fq886-mbkw1fq886.gz
