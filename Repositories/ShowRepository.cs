@@ -77,7 +77,13 @@ public class ShowRepository : IShowRepository
 
         await transaction.CommitAsync();
 
-        return show;
+        // Reload Show with Movie and Screen details.
+        var createdShow = await _context.Shows
+            .Include(s => s.Movie)
+            .Include(s => s.Screen)
+            .FirstAsync(s => s.ShowId == show.ShowId);
+
+        return createdShow;
     }
 
     public async Task<bool> UpdateAsync(Show show)

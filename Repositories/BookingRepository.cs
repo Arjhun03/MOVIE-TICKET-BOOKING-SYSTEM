@@ -1,4 +1,3 @@
-
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using MovieTicketBooking.Data;
@@ -16,22 +15,46 @@ public class BookingRepository : IBookingRepository
         _context = context;
     }
 
-    public async Task<List<Booking>> GetAllAsync()
+    // Admin/Manager: all bookings
+    // Customer: only their bookings
+    public async Task<List<Booking>> GetAllAsync(int? customerId)
     {
-        return await _context.Bookings
+        var query = _context.Bookings
             .Include(b => b.BookingSeats)
+            .AsQueryable();
+
+        if (customerId.HasValue)
+        {
+            query = query.Where(
+                b => b.CustomerId == customerId.Value);
+        }
+
+        return await query
             .OrderByDescending(b => b.BookingDate)
             .ToListAsync();
     }
 
-    public async Task<Booking?> GetByIdAsync(int bookingId)
+    // Admin/Manager: any booking
+    // Customer: only their booking
+    public async Task<Booking?> GetByIdAsync(
+        int bookingId,
+        int? customerId)
     {
-        return await _context.Bookings
+        var query = _context.Bookings
             .Include(b => b.BookingSeats)
-            .FirstOrDefaultAsync(b => b.BookingId == bookingId);
+            .Where(b => b.BookingId == bookingId);
+
+        if (customerId.HasValue)
+        {
+            query = query.Where(
+                b => b.CustomerId == customerId.Value);
+        }
+
+        return await query.FirstOrDefaultAsync();
     }
 
-    public async Task<Booking?> GetByReferenceAsync(string bookingReference)
+    public async Task<Booking?> GetByReferenceAsync(
+        string bookingReference)
     {
         return await _context.Bookings
             .Include(b => b.BookingSeats)
@@ -96,15 +119,27 @@ public class BookingRepository : IBookingRepository
         return booking;
     }
 
-    public async Task<Booking?> CancelAsync(int bookingId)
+    // Admin/Manager: any booking
+    // Customer: only their booking
+    public async Task<Booking?> CancelAsync(
+        int bookingId,
+        int? customerId)
     {
         await using var transaction =
             await _context.Database.BeginTransactionAsync(
                 IsolationLevel.Serializable);
 
-        var booking = await _context.Bookings
+        var query = _context.Bookings
             .Include(b => b.BookingSeats)
-            .FirstOrDefaultAsync(b => b.BookingId == bookingId);
+            .Where(b => b.BookingId == bookingId);
+
+        if (customerId.HasValue)
+        {
+            query = query.Where(
+                b => b.CustomerId == customerId.Value);
+        }
+
+        var booking = await query.FirstOrDefaultAsync();
 
         if (booking == null)
         {

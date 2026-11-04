@@ -8,6 +8,9 @@ public class Booking
 
     public int ShowId { get; set; }
 
+    // Authenticated user who owns this booking
+    public int CustomerId { get; set; }
+
     public string CustomerName { get; set; } = string.Empty;
 
     public string CustomerEmail { get; set; } = string.Empty;
@@ -22,6 +25,8 @@ public class Booking
 
     // Navigation Properties
     public Show Show { get; set; } = null!;
+
+    public User Customer { get; set; } = null!;
 
     public ICollection<BookingSeat> BookingSeats { get; set; }
         = new List<BookingSeat>();

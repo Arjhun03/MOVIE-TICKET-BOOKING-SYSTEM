@@ -1,16 +1,31 @@
+
 using MovieTicketBooking.DTOs.Bookings;
 
 namespace MovieTicketBooking.Services.Interfaces;
 
 public interface IBookingService
 {
-    Task<List<BookingResponse>> GetAllAsync();
+    // Admin/Manager: all bookings
+    // Customer: only their own bookings
+    Task<List<BookingResponse>> GetAllAsync(int? customerId);
 
-    Task<BookingResponse?> GetByIdAsync(int bookingId);
+    // Admin/Manager: any booking
+    // Customer: only their own booking
+    Task<BookingResponse?> GetByIdAsync(
+        int bookingId,
+        int? customerId);
 
-    Task<BookingResponse?> GetByReferenceAsync(string bookingReference);
+    Task<BookingResponse?> GetByReferenceAsync(
+        string bookingReference);
 
-    Task<BookingResponse> CreateAsync(CreateBookingRequest request);
+    // Always requires an authenticated customer ID
+    Task<BookingResponse> CreateAsync(
+        CreateBookingRequest request,
+        int customerId);
 
-    Task<CancelBookingResponse?> CancelAsync(int bookingId);
+    // Admin/Manager: any booking
+    // Customer: only their own booking
+    Task<CancelBookingResponse?> CancelAsync(
+        int bookingId,
+        int? customerId);
 }

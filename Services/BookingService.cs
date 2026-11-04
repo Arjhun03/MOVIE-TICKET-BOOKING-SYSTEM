@@ -1,4 +1,3 @@
-
 using MovieTicketBooking.DTOs.Bookings;
 using MovieTicketBooking.Models;
 using MovieTicketBooking.Repositories.Interfaces;
@@ -15,16 +14,25 @@ public class BookingService : IBookingService
         _repository = repository;
     }
 
-    public async Task<List<BookingResponse>> GetAllAsync()
+    // Admin/Manager: all bookings
+    // Customer: only their bookings
+    public async Task<List<BookingResponse>> GetAllAsync(
+        int? customerId)
     {
-        var bookings = await _repository.GetAllAsync();
+        var bookings = await _repository.GetAllAsync(customerId);
 
         return bookings.Select(MapToResponse).ToList();
     }
 
-    public async Task<BookingResponse?> GetByIdAsync(int bookingId)
+    // Admin/Manager: any booking
+    // Customer: only their booking
+    public async Task<BookingResponse?> GetByIdAsync(
+        int bookingId,
+        int? customerId)
     {
-        var booking = await _repository.GetByIdAsync(bookingId);
+        var booking = await _repository.GetByIdAsync(
+            bookingId,
+            customerId);
 
         return booking == null ? null : MapToResponse(booking);
     }
@@ -38,9 +46,17 @@ public class BookingService : IBookingService
         return booking == null ? null : MapToResponse(booking);
     }
 
+    // Create booking for the authenticated customer
     public async Task<BookingResponse> CreateAsync(
-        CreateBookingRequest request)
+        CreateBookingRequest request,
+        int customerId)
     {
+        if (customerId <= 0)
+        {
+            throw new ArgumentException(
+                "Invalid customer ID.");
+        }
+
         if (request.SeatIds == null || request.SeatIds.Count == 0)
         {
             throw new ArgumentException(
@@ -65,9 +81,14 @@ public class BookingService : IBookingService
                 "BK" + Guid.NewGuid().ToString("N")[..20].ToUpperInvariant(),
 
             ShowId = request.ShowId,
+
+            // Ownership comes from the authenticated JWT
+            CustomerId = customerId,
+
             CustomerName = request.CustomerName.Trim(),
             CustomerEmail = request.CustomerEmail.Trim(),
             CustomerPhone = request.CustomerPhone.Trim(),
+
             BookingDate = DateTime.UtcNow,
             Status = "Confirmed"
         };
@@ -79,9 +100,15 @@ public class BookingService : IBookingService
         return MapToResponse(createdBooking);
     }
 
-    public async Task<CancelBookingResponse?> CancelAsync(int bookingId)
+    // Admin/Manager: any booking
+    // Customer: only their booking
+    public async Task<CancelBookingResponse?> CancelAsync(
+        int bookingId,
+        int? customerId)
     {
-        var booking = await _repository.CancelAsync(bookingId);
+        var booking = await _repository.CancelAsync(
+            bookingId,
+            customerId);
 
         if (booking == null)
         {

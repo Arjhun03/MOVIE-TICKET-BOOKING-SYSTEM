@@ -43,6 +43,9 @@ namespace MOVIE_TICKET_BOOKING_SYSTEM.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CustomerName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -71,6 +74,8 @@ namespace MOVIE_TICKET_BOOKING_SYSTEM.Migrations
 
                     b.HasIndex("BookingReference")
                         .IsUnique();
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("ShowId");
 
@@ -342,11 +347,19 @@ namespace MOVIE_TICKET_BOOKING_SYSTEM.Migrations
 
             modelBuilder.Entity("MovieTicketBooking.Models.Booking", b =>
                 {
+                    b.HasOne("MovieTicketBooking.Models.User", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("MovieTicketBooking.Models.Show", "Show")
                         .WithMany("Bookings")
                         .HasForeignKey("ShowId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Show");
                 });

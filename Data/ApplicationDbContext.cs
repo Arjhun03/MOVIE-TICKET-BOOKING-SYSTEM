@@ -262,6 +262,12 @@ public class ApplicationDbContext : DbContext
                 .WithMany(s => s.Bookings)
                 .HasForeignKey(b => b.ShowId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Booking and User relationship
+            entity.HasOne(b => b.Customer)
+                .WithMany()
+                .HasForeignKey(b => b.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         // BookingSeat Configuration
@@ -291,7 +297,8 @@ public class ApplicationDbContext : DbContext
             entity.HasIndex(bs => new { bs.BookingId, bs.SeatId })
                 .IsUnique();
         });
-        
+
+        // User Configuration
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("Users");
