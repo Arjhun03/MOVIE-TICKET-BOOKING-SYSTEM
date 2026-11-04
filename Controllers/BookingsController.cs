@@ -1,4 +1,3 @@
-
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,35 +19,21 @@ public class BookingsController : ControllerBase
     }
 
     // GET: api/bookings
-    // Admin/Manager: all bookings
-    // Customer: own bookings
+    // Access restricted to Admin and Manager (enforced by BookingAuthorizationMiddleware)
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var customerId = IsAdminOrManager()
-            ? null
-            : GetCurrentUserId();
-
-        if (!IsAdminOrManager() && customerId == null)
-            return Unauthorized();
-
-        var bookings = await _service.GetAllAsync(customerId);
+        var bookings = await _service.GetAllAsync(null);
 
         return Ok(bookings);
     }
 
     // GET: api/bookings/5
+    // Ownership authorization is enforced by BookingAuthorizationMiddleware before reaching this action
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var customerId = IsAdminOrManager()
-            ? null
-            : GetCurrentUserId();
-
-        if (!IsAdminOrManager() && customerId == null)
-            return Unauthorized();
-
-        var booking = await _service.GetByIdAsync(id, customerId);
+        var booking = await _service.GetByIdAsync(id, null);
 
         if (booking == null)
         {
@@ -62,6 +47,7 @@ public class BookingsController : ControllerBase
     }
 
     // GET: api/bookings/reference/BK123
+    // Public endpoint for reference lookup
     [AllowAnonymous]
     [HttpGet("reference/{bookingReference}")]
     public async Task<IActionResult> GetByReference(
@@ -82,22 +68,22 @@ public class BookingsController : ControllerBase
     }
 
     // POST: api/bookings
-    // Only authenticated customers can create bookings
-    [Authorize(Roles = "Customer")]
+    // CustomerId is derived securely from the authenticated JWT token claims
     [HttpPost]
     public async Task<IActionResult> Create(
         CreateBookingRequest request)
     {
-        var customerId = GetCurrentUserId();
-
-        if (customerId == null)
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userId, out var customerId))
+        {
             return Unauthorized();
+        }
 
         try
         {
             var booking = await _service.CreateAsync(
                 request,
-                customerId.Value);
+                customerId);
 
             return CreatedAtAction(
                 nameof(GetById),
@@ -121,21 +107,13 @@ public class BookingsController : ControllerBase
     }
 
     // PATCH: api/bookings/5/cancel
+    // Ownership authorization is enforced by BookingAuthorizationMiddleware before reaching this action
     [HttpPatch("{id:int}/cancel")]
     public async Task<IActionResult> Cancel(int id)
     {
-        var customerId = IsAdminOrManager()
-            ? null
-            : GetCurrentUserId();
-
-        if (!IsAdminOrManager() && customerId == null)
-            return Unauthorized();
-
         try
         {
-            var result = await _service.CancelAsync(
-                id,
-                customerId);
+            var result = await _service.CancelAsync(id, null);
 
             if (result == null)
             {
@@ -154,21 +132,5 @@ public class BookingsController : ControllerBase
                 message = ex.Message
             });
         }
-    }
-
-    private int? GetCurrentUserId()
-    {
-        var userId = User.FindFirstValue(
-            ClaimTypes.NameIdentifier);
-
-        return int.TryParse(userId, out var id)
-            ? id
-            : null;
-    }
-
-    private bool IsAdminOrManager()
-    {
-        return User.IsInRole("Admin") ||
-               User.IsInRole("Manager");
     }
 }

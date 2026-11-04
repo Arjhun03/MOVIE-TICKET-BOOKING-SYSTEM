@@ -11,6 +11,7 @@ using MovieTicketBooking.Repositories;
 using MovieTicketBooking.Repositories.Interfaces;
 using MovieTicketBooking.Services;
 using MovieTicketBooking.Services.Interfaces;
+using MovieTicketBooking.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -112,10 +113,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
-
-    var seeder = scope.ServiceProvider
-        .GetRequiredService<DbSeeder>();
-
+    var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
     await seeder.SeedAsync();
 }
 
@@ -127,15 +125,42 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors("BoxOfficeFrontend");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+// 1. Routing - Match route to endpoint
+app.UseRouting();
+
+// 2. Endpoint Metadata Diagnostics (inspects matched endpoint)
+if (app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<EndpointMetadataMiddleware>();
+}
+
+// 3. Authentication - Validates JWT and populates HttpContext.User
 app.UseAuthentication();
+
+// 4. Authentication Diagnostics (logs claims & identity)
+if (app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<AuthenticationDiagnosticsMiddleware>();
+}
+
+// 5. Authorization Diagnostics (traces authorization process & final response status code)
+if (app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<AuthorizationDiagnosticsMiddleware>();
+}
+
+// 6. Custom Booking Authorization Middleware (enforces booking ownership)
+app.UseMiddleware<BookingAuthorizationMiddleware>();
+
+// 7. Authorization - Checks endpoint access permissions
 app.UseAuthorization();
 
+// 8. Map Controllers & Frontend Fallback
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
