@@ -1,10 +1,12 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieTicketBooking.DTOs.Bookings;
 using MovieTicketBooking.Services.Interfaces;
 
 namespace MovieTicketBooking.Controllers;
 
+[Authorize(Roles = "Admin,Manager")]
 [ApiController]
 [Route("api/[controller]")]
 public class BookingsController : ControllerBase
@@ -43,6 +45,7 @@ public class BookingsController : ControllerBase
     }
 
     // GET: api/bookings/reference/BK123
+    [AllowAnonymous]
     [HttpGet("reference/{bookingReference}")]
     public async Task<IActionResult> GetByReference(
         string bookingReference)
@@ -62,6 +65,7 @@ public class BookingsController : ControllerBase
     }
 
     // POST: api/bookings
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> Create(
         CreateBookingRequest request)

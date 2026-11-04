@@ -1,10 +1,12 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieTicketBooking.DTOs.Screens;
 using MovieTicketBooking.Services.Interfaces;
 
 namespace MovieTicketBooking.Controllers;
 
+[Authorize(Roles = "Admin,Manager")]
 [ApiController]
 [Route("api/[controller]")]
 public class ScreensController : ControllerBase
@@ -17,6 +19,7 @@ public class ScreensController : ControllerBase
     }
 
     // GET: api/screens
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -26,6 +29,7 @@ public class ScreensController : ControllerBase
     }
 
     // GET: api/screens/1
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -43,6 +47,7 @@ public class ScreensController : ControllerBase
     }
 
     // GET: api/screens/theatre/1
+    [AllowAnonymous]
     [HttpGet("theatre/{theatreId:int}")]
     public async Task<IActionResult> GetByTheatreId(int theatreId)
     {
